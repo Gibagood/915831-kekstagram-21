@@ -9,15 +9,16 @@
     .content
     .querySelector('.picture');
 
-  const randomIndex = function randomIndex(num) {
-    const randomNum = Math.floor(Math.random() * num);
-    return randomNum;
+  const randomIndex = function randomIndex(array) {
+    const randomNum = Math.floor(Math.random() * array.length);
+    const randomNumIndex = array[randomNum];
+    return randomNumIndex;
   };
 
   const renderPicture = function renderPicture() {
     const pictureElement = pictureTemplate.cloneNode(true);
-    pictureElement.querySelector('.picture__img').src = 1;
-    pictureElement.querySelector('.picture__comments').textContent = MESSAGE[randomIndex(MESSAGE.length)];
+    pictureElement.querySelector('.picture__img').src = 'photos/1.jpg';
+    pictureElement.querySelector('.picture__comments').textContent = randomIndex(MESSAGE);
     return renderPicture;
   };
 
