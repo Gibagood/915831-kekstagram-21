@@ -9,7 +9,7 @@
     .content
     .querySelector('.picture');
 
-  const randomIndex = function randomIndex(array) {
+  const getrandomIndex = function getrandomIndex(array) {
     const randomNum = Math.floor(Math.random() * array.length);
     const randomNumIndex = array[randomNum];
     return randomNumIndex;
@@ -18,7 +18,7 @@
   const renderPicture = function renderPicture(num) {
     const pictureElement = pictureTemplate.cloneNode(true);
     pictureElement.querySelector('.picture__img').src = `photos/${num}.jpg`;
-    pictureElement.querySelector('.picture__comments').textContent = randomIndex(MESSAGE);
+    pictureElement.querySelector('.picture__comments').textContent = getrandomIndex(MESSAGE);
     return renderPicture;
   };
 
