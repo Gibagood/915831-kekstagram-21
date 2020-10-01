@@ -15,9 +15,9 @@
     return randomNumIndex;
   };
 
-  const renderPicture = function renderPicture() {
+  const renderPicture = function renderPicture(num) {
     const pictureElement = pictureTemplate.cloneNode(true);
-    pictureElement.querySelector('.picture__img').src = 'photos/1.jpg';
+    pictureElement.querySelector('.picture__img').src = `photos/${num}.jpg`;
     pictureElement.querySelector('.picture__comments').textContent = randomIndex(MESSAGE);
     return renderPicture;
   };
