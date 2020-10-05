@@ -36,15 +36,15 @@
 
   const renderPicture = function renderPicture() {
     const pictureElement = pictureTemplate.cloneNode(true);
-    pictureElement.querySelector('.picture__img').src = `photos/${num}.jpg`;
+    pictureElement.querySelector('.picture__img').src = `photos/${getRandomNumber(1, QUANTITY_IMG)}.jpg`;
     pictureElement.querySelector('.picture__comments').textContent = getrandomIndex(MESSAGE);
-    pictureElement.querySelector('picture__likes').textContent = getRandomNumber(MIN_LIKES, MAX_LIKES);
+    pictureElement.querySelector('.picture__likes').textContent = getRandomNumber(MIN_LIKES, MAX_LIKES);
     return renderPicture;
   };
 
   const fragment = document.createDocumentFragment();
   for (let i = 1; i <= QUANTITY_IMG; i += 1) {
-    fragment.appendChild(renderPicture(pictures(i)));
+    fragment.appendChild(renderPicture());
   }
   picturesList.appendChild(fragment);
 }());
