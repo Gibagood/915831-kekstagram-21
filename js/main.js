@@ -12,7 +12,7 @@
     .content
     .querySelector('.picture');
 
-  const getRandomIndex = function getrandomIndex(array) {
+  const getRandomItem = function getrandomItem(array) {
     const randomNum = Math.floor(Math.random() * array.length);
     const randomNumIndex = array[randomNum];
     return randomNumIndex;
@@ -24,35 +24,33 @@
   };
 
   const getCommentArray = function getCommentArray() {
-    const newComment = [];
-    const QUANTITY_COMMENTS = getRandomNumber(MIN_COMMENTS, MAX_COMMENTS);
-    for (let i = 0; i <= QUANTITY_COMMENTS; i += 1) {
-      i = {
-        name: getRandomIndex(NAMES),
+    const newComments = [];
+    const quantityComments = getRandomNumber(MIN_COMMENTS, MAX_COMMENTS);
+    for (let i = 0; i < quantityComments; i += 1) {
+      newComments.push({
+        name: getRandomItem(NAMES),
         avatar: `img/avatar-${getRandomNumber(1, 6)}.svg`,
-        message: getRandomIndex(MESSAGE),
-      };
-      newComment.push(i);
+        message: getRandomItem(MESSAGE),
+      });
     }
-    console.log(newComment);
-    return newComment;
+    return newComments;
   };
 
-  const getImageArray = function getImageArray(item) {
-    const imageArray = {
+  const getPosts = function getPosts(item) {
+    const post = {
       url: `photos/${item}.jpg`,
       description: 'описание фотографии',
       likes: getRandomNumber(MIN_LIKES, MAX_LIKES),
       comments: getCommentArray().length,
     };
-    return imageArray;
+    return post;
   };
 
   const getRenderPicture = function renderPicture(item) {
     const pictureElement = pictureTemplate.cloneNode(true);
-    pictureElement.querySelector('.picture__img').src = getImageArray(item).url;
-    pictureElement.querySelector('.picture__comments').textContent = getImageArray(item).comments;
-    pictureElement.querySelector('.picture__likes').textContent = getImageArray(item).likes;
+    pictureElement.querySelector('.picture__img').src = getPosts(item).url;
+    pictureElement.querySelector('.picture__comments').textContent = getPosts(item).comments;
+    pictureElement.querySelector('.picture__likes').textContent = getPosts(item).likes;
     return pictureElement;
   };
 
