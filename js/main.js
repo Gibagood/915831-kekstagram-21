@@ -6,7 +6,7 @@
   const MESSAGES = [`Всё отлично!`, `В целом всё неплохо. Но не всё.`, `Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.`, `Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.`, `Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.`, `Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!`];
   const MIN_LIKES = 15;
   const MAX_LIKES = 200;
-  const MIN_COMMENTS = 1;
+  const MIN_COMMENTS = 3;
   const MAX_COMMENTS = 5;
   const PHOTO = 1;
   const SIZE_AVATAR = 35;
@@ -14,6 +14,10 @@
   const MAX_SCALE = 100;
   const MIN_SCALE = 25;
   const MAX_NAME_LENGTH = 20;
+  const SPACE = ` `;
+  const HASH_PATTERN = /^#/;
+  const LETTER_NUM_PATTERN = /^#[0-9a-z]+/i;
+  const RETURN_PATTERN = /^#{4}\s/;
   const bigPicture = document.querySelector(`.big-picture`);
   const bigPictureImg = bigPicture.querySelector(`.big-picture__img`);
   const socialComments = bigPicture.querySelector(`.social__comments`);
@@ -32,13 +36,7 @@
   const scaleControlValue = formUpload.querySelector(`.scale__control--value`);
   const scaleControlSmaller = formUpload.querySelector(`.scale__control--smaller`);
   const scaleControlBigger = formUpload.querySelector(`.scale__control--bigger`);
-  let SCALE_CONTROL_DEFAULT = 100;
   const hashtagsInput = formUpload.querySelector(`.text__hashtags`);
-  scaleControlValue.value = SCALE_CONTROL_DEFAULT + `%`;
-  const space = ` `;
-  const hashPattern = /^#/;
-  const letterNumPattern = /^#[0-9a-z]+/i;
-  const returnPattern = /^#{4}\s/;
 
   const pictureTemplate = document.querySelector(`#picture`)
     .content
@@ -57,6 +55,7 @@
   fileInput.addEventListener(`change`, function () {
     formUpload.classList.remove(`hidden`);
     document.body.classList.add(`modal-open`);
+    scaleControlValue.value = `100%`;
 
     const closeFileInput = function () {
       formUpload.classList.add(`hidden`);
@@ -113,23 +112,22 @@
     `effects__preview--heat`
   ];
 
-  const clickOnEffects = function (evt) {
-    let target = evt.target;
+  const onEffectsClick = function (evt) {
+    const target = evt.target;
     let anotherClass;
     if (evt.target.matches(`span`)) {
-      for (let i = 0; i < target.classList.length; i++) {
-        anotherClass = target.classList[1];
-        for (let a = 0; a < effectsClasses.length; a++) {
-          if (imgPreview.classList.contains(effectsClasses[a])) {
-            imgPreview.classList.remove(effectsClasses[a]);
-          }
-          imgPreview.classList.add(anotherClass);
+      let classes = target.classList;
+      anotherClass = classes.item(classes.length - 1);
+      effectsClasses.forEach(function (item) {
+        if (imgPreview.classList.contains(item)) {
+          imgPreview.classList.remove(item);
         }
-      }
+        imgPreview.classList.add(anotherClass);
+      });
     }
   };
 
-  effectsList.addEventListener(`click`, clickOnEffects);
+  effectsList.addEventListener(`click`, onEffectsClick);
 
   const sliderValuePosition = 66;
   slider.style.left = sliderValuePosition + `%`;
@@ -177,14 +175,15 @@
 
   slider.addEventListener(`mouseup`, sliderMouseUp);
 
-
+  let SCALE_CONTROL_DEFAULT = 100;
+  scaleControlValue.value = SCALE_CONTROL_DEFAULT + `%`;
   scaleControlSmaller.addEventListener(`click`, function () {
     if (SCALE_CONTROL_DEFAULT > MIN_SCALE) {
       scaleControlValue.value = (SCALE_CONTROL_DEFAULT - STEP_SIZE) + `%`;
       SCALE_CONTROL_DEFAULT = SCALE_CONTROL_DEFAULT - STEP_SIZE;
       imgPreview.style.transform = `scale(0.${SCALE_CONTROL_DEFAULT})`;
     } else {
-      scaleControlValue.value = MIN_SCALE = `%`;
+      scaleControlValue.value = MIN_SCALE + `%`;
     }
   });
 
@@ -245,9 +244,9 @@
     newText.classList.add(`social__text`);
 
     const commentArr = getCommentArray()[item];
-    newText.textContent = commentArr.message;
-    newAvatar.src = commentArr.avatar;
     newAvatar.alt = commentArr.name;
+    newAvatar.src = commentArr.avatar;
+    newText.textContent = commentArr.message;
     newAvatar.width = SIZE_AVATAR;
     newAvatar.height = SIZE_AVATAR;
     return newComment;
@@ -261,7 +260,7 @@
     bigPicture.querySelector(`.social__caption`).textContent = post.description;
 
     const fragment = document.createDocumentFragment();
-    for (let i = 1; i <= commentsCount.textContent; i += 1) {
+    for (let i = 0; i < commentsCount.textContent; i += 1) {
       fragment.appendChild(getComment(i));
     }
     socialComments.appendChild(fragment);
@@ -281,11 +280,11 @@
 
 
   hashtagsInput.addEventListener(`input`, function () {
-    let hashtagsArray = splitString(hashtagsInput, space);
-    for (let i = 0; i <= hashtagsArray.length; i += 1) {
-      let valueLength = hashtagsArray[i].value.length;
-      let currentItem = hashtagsArray[i];
-      for (let a = 0; a <= hashtagsArray.length; a += 1) {
+    let hashtagsArray = splitString(hashtagsInput, SPACE);
+    hashtagsArray.forEach(function (item) {
+      const valueLength = item.value.length;
+      let currentItem = item;
+      for (let a = 0; a <= item.length; a += 1) {
         if (currentItem === hashtagsArray[a]) {
           hashtagsInput.setCustomValidity(`Один и тот же хэш-тег не может быть использован дважды`);
         } else {
@@ -293,20 +292,20 @@
         }
       }
 
-      if (!hashPattern.test(hashtagsArray[i].value)) {
+      if (!HASH_PATTERN.test(item.value)) {
         hashtagsInput.setCustomValidity(`Хэш-тег должен начинаться с символа # (решётка)`);
-      } else if (!letterNumPattern.test(hashtagsArray[i].value)) {
+      } else if (!LETTER_NUM_PATTERN.test(item.value)) {
         hashtagsInput.setCustomValidity(`Cтрока после решётки должна состоять из букв и чисел и не может содержать пробелы, спецсимволы (#, @, $ и т. п.), символы пунктуации (тире, дефис, запятая и т. п.), эмодзи и т. д.;`);
-      } else if (hashtagsArray[i].value === `#`) {
+      } else if (item.value === `#`) {
         hashtagsInput.setCustomValidity(`Хеш-тег не может состоять только из одной решётки`);
       } else if (valueLength > MAX_NAME_LENGTH) {
         hashtagsInput.setCustomValidity(`Удалите лишние ` + (valueLength - MAX_NAME_LENGTH) + ` симв.`);
-      } else if (!returnPattern.test(hashtagsArray[i].value)) {
+      } else if (!RETURN_PATTERN.test(item.value)) {
         hashtagsInput.setCustomValidity(`Нельзя указывать больше пяти хэш-тегов`);
       } else {
         hashtagsInput.setCustomValidity(``);
       }
       hashtagsInput.reportValidity();
-    }
+    });
   });
 }());
