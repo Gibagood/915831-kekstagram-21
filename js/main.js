@@ -8,7 +8,6 @@
   const MAX_LIKES = 200;
   const MIN_COMMENTS = 3;
   const MAX_COMMENTS = 5;
-  const PHOTO = 1;
   const SIZE_AVATAR = 35;
   const STEP_SIZE = 25;
   const MAX_SCALE = 100;
@@ -92,16 +91,23 @@
         closeBigPicture();
       });
 
-      document.addEventListener(`keydown`, function () {
-        if (evt.key === `Escape`) {
+      document.addEventListener(`keydown`, function (event) {
+        if (event.key === `Escape`) {
           evt.preventDefault();
           closeBigPicture();
         }
       });
+      getBigPicture(evt.target.id);
     }
   };
 
   picturesList.addEventListener(`click`, clickOnPicture);
+  picturesList.addEventListener(`keydown`, function (evt) {
+    if (evt.key === `Enter`) {
+      evt.preventDefault();
+      clickOnPicture(evt);
+    }
+  });
 
   const effectsClasses = [
     `effects__preview--none`,
@@ -220,6 +226,8 @@
       description: `описание фотографии`,
       likes: getRandomNumber(MIN_LIKES, MAX_LIKES),
       comments: getCommentArray().length,
+      id: item,
+      tabindex: `0`,
     };
     return post;
   };
@@ -230,6 +238,8 @@
     pictureElement.querySelector(`.picture__img`).src = post.url;
     pictureElement.querySelector(`.picture__comments`).textContent = post.comments;
     pictureElement.querySelector(`.picture__likes`).textContent = post.likes;
+    pictureElement.querySelector(`.picture__img`).id = post.id;
+    pictureElement.querySelector(`.picture__img`).tabIndex = post.tabindex;
     return pictureElement;
   };
 
@@ -271,7 +281,6 @@
     fragment.appendChild(getRenderPicture(i));
   }
   picturesList.appendChild(fragment);
-  getBigPicture(PHOTO);
 
   const splitString = function (stringToSplit, separator) {
     let arrayOfStrings = stringToSplit.split(separator);
