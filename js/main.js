@@ -13,10 +13,9 @@
   const MAX_SCALE = 100;
   const MIN_SCALE = 25;
   const MAX_NAME_LENGTH = 20;
-  const SPACE = ` `;
   const HASH_PATTERN = /^#/;
   const LETTER_NUM_PATTERN = /^#[0-9a-z]+/i;
-  const RETURN_PATTERN = /^#{4}\s/;
+  const MAX_QANTITY_HASHTAGS = 5;
   const bigPicture = document.querySelector(`.big-picture`);
   const bigPictureImg = bigPicture.querySelector(`.big-picture__img`);
   const socialComments = bigPicture.querySelector(`.social__comments`);
@@ -36,6 +35,7 @@
   const scaleControlSmaller = formUpload.querySelector(`.scale__control--smaller`);
   const scaleControlBigger = formUpload.querySelector(`.scale__control--bigger`);
   const hashtagsInput = formUpload.querySelector(`.text__hashtags`);
+  const textDescription = formUpload.querySelector(`.text__description`);
 
   const pictureTemplate = document.querySelector(`#picture`)
     .content
@@ -66,16 +66,30 @@
       closeFileInput();
     });
 
-    document.addEventListener(`keydown`, function (evt) {
+    const clickOnEscape = document.addEventListener(`keydown`, function (evt) {
       if (evt.key === `Escape`) {
         evt.preventDefault();
         closeFileInput();
       }
     });
+
+    const clickOnEscapeInput = document.addEventListener(`keydown`, function (evt) {
+      if (evt.key === `Escape`) {
+        evt.target.blur();
+      }
+    });
+
+    textDescription.focusin = function (evt) {
+      clickOnEscapeInput(evt);
+    };
+
+    textDescription.focusout = function (evt) {
+      clickOnEscape(evt);
+    };
   });
 
   const clickOnPicture = function (evt) {
-    if (evt.target.matches(`.picture__img`)) {
+    if (evt.target.matches(`.picture`)) {
       bigPicture.classList.remove(`hidden`);
       socialCommentsCount.classList.add(`hidden`);
       commentsLoader.classList.add(`hidden`);
@@ -102,6 +116,7 @@
   };
 
   picturesList.addEventListener(`click`, clickOnPicture);
+
   picturesList.addEventListener(`keydown`, function (evt) {
     if (evt.key === `Enter`) {
       evt.preventDefault();
@@ -227,7 +242,6 @@
       likes: getRandomNumber(MIN_LIKES, MAX_LIKES),
       comments: getCommentArray().length,
       id: item,
-      tabindex: `0`,
     };
     return post;
   };
@@ -238,8 +252,7 @@
     pictureElement.querySelector(`.picture__img`).src = post.url;
     pictureElement.querySelector(`.picture__comments`).textContent = post.comments;
     pictureElement.querySelector(`.picture__likes`).textContent = post.likes;
-    pictureElement.querySelector(`.picture__img`).id = post.id;
-    pictureElement.querySelector(`.picture__img`).tabIndex = post.tabindex;
+    pictureElement.id = post.id;
     return pictureElement;
   };
 
@@ -282,39 +295,39 @@
   }
   picturesList.appendChild(fragment);
 
-  const splitString = function (stringToSplit, separator) {
-    let arrayOfStrings = stringToSplit.split(separator);
-    return arrayOfStrings;
-  };
-
-
   hashtagsInput.addEventListener(`input`, function () {
-    let hashtagsArray = splitString(hashtagsInput, SPACE);
-    hashtagsArray.forEach(function (item) {
-      const valueLength = item.value.length;
-      let currentItem = item;
-      for (let a = 0; a <= item.length; a += 1) {
-        if (currentItem === hashtagsArray[a]) {
-          hashtagsInput.setCustomValidity(`Один и тот же хэш-тег не может быть использован дважды`);
+    let hashtagsArray = hashtagsInput.value.trim().split(` `);
+
+    if (hashtagsArray.length <= MAX_QANTITY_HASHTAGS) {
+      hashtagsArray.forEach(function (item) {
+        const valueLength = item.length;
+
+        if (!HASH_PATTERN.test(item)) {
+          hashtagsInput.setCustomValidity(`Хэш-тег должен начинаться с символа # (решётка)`);
+        } else if (!LETTER_NUM_PATTERN.test(item)) {
+          hashtagsInput.setCustomValidity(`Cтрока после решётки должна состоять из букв и чисел и не может содержать пробелы, спецсимволы (#, @, $ и т. п.), символы пунктуации (тире, дефис, запятая и т. п.), эмодзи и т. д.;`);
+        } else if (item === `#`) {
+          hashtagsInput.setCustomValidity(`Хеш-тег не может состоять только из одной решётки`);
+        } else if (valueLength > MAX_NAME_LENGTH) {
+          hashtagsInput.setCustomValidity(`Удалите лишние ` + (valueLength - MAX_NAME_LENGTH) + ` симв.`);
         } else {
           hashtagsInput.setCustomValidity(``);
         }
+      });
+    } else {
+      hashtagsInput.setCustomValidity(`Нельзя указывать больше пяти хэш-тегов`);
+    }
+    if (hashtagsArray.length > 1) {
+      for (let i = 0; i < hashtagsArray.length; i += 1) {
+        for (let j = i + 1; j < hashtagsArray.length; j += 1) {
+          if (j.value === i.value) {
+            hashtagsInput.setCustomValidity(`Один и тот же хэш-тег не может быть использован дважды`);
+          } else {
+            hashtagsInput.setCustomValidity(``);
+          }
+        }
       }
-
-      if (!HASH_PATTERN.test(item.value)) {
-        hashtagsInput.setCustomValidity(`Хэш-тег должен начинаться с символа # (решётка)`);
-      } else if (!LETTER_NUM_PATTERN.test(item.value)) {
-        hashtagsInput.setCustomValidity(`Cтрока после решётки должна состоять из букв и чисел и не может содержать пробелы, спецсимволы (#, @, $ и т. п.), символы пунктуации (тире, дефис, запятая и т. п.), эмодзи и т. д.;`);
-      } else if (item.value === `#`) {
-        hashtagsInput.setCustomValidity(`Хеш-тег не может состоять только из одной решётки`);
-      } else if (valueLength > MAX_NAME_LENGTH) {
-        hashtagsInput.setCustomValidity(`Удалите лишние ` + (valueLength - MAX_NAME_LENGTH) + ` симв.`);
-      } else if (!RETURN_PATTERN.test(item.value)) {
-        hashtagsInput.setCustomValidity(`Нельзя указывать больше пяти хэш-тегов`);
-      } else {
-        hashtagsInput.setCustomValidity(``);
-      }
-      hashtagsInput.reportValidity();
-    });
+    }
+    hashtagsInput.reportValidity();
   });
 }());
