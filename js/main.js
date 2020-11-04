@@ -66,61 +66,53 @@
       closeFileInput();
     });
 
-    const clickOnEscape = document.addEventListener(`keydown`, function (evt) {
+    const onEscapeInInputClick = document.addEventListener(`keydown`, function (evt) {
       if (evt.key === `Escape`) {
         evt.preventDefault();
         closeFileInput();
       }
     });
 
-    const clickOnEscapeInput = document.addEventListener(`keydown`, function (evt) {
-      if (evt.key === `Escape`) {
-        evt.target.blur();
-      }
-    });
-
-    textDescription.focusin = function (evt) {
-      clickOnEscapeInput(evt);
-    };
-
-    textDescription.focusout = function (evt) {
-      clickOnEscape(evt);
-    };
+    textDescription.addEventListener(`onblur`, onEscapeInInputClick);
   });
 
   const clickOnPicture = function (evt) {
-    if (evt.target.matches(`.picture`)) {
-      bigPicture.classList.remove(`hidden`);
-      socialCommentsCount.classList.add(`hidden`);
-      commentsLoader.classList.add(`hidden`);
-      document.body.classList.add(`modal-open`);
+    bigPicture.classList.remove(`hidden`);
+    socialCommentsCount.classList.add(`hidden`);
+    commentsLoader.classList.add(`hidden`);
+    document.body.classList.add(`modal-open`);
 
-      const closeBigPicture = function () {
-        bigPicture.classList.add(`hidden`);
-        socialCommentsCount.classList.remove(`hidden`);
-        commentsLoader.classList.remove(`hidden`);
-        document.body.classList.remove(`modal-open`);
-      };
-      bigPictureCancel.addEventListener(`click`, function () {
+    const closeBigPicture = function () {
+      bigPicture.classList.add(`hidden`);
+      socialCommentsCount.classList.remove(`hidden`);
+      commentsLoader.classList.remove(`hidden`);
+      document.body.classList.remove(`modal-open`);
+    };
+    bigPictureCancel.addEventListener(`click`, function () {
+      closeBigPicture();
+    });
+
+    document.addEventListener(`keydown`, function (event) {
+      if (event.key === `Escape`) {
+        event.preventDefault();
         closeBigPicture();
-      });
+      }
+    });
 
-      document.addEventListener(`keydown`, function (event) {
-        if (event.key === `Escape`) {
-          evt.preventDefault();
-          closeBigPicture();
-        }
-      });
-      getBigPicture(evt.target.id);
-    }
+    getBigPicture(evt.id);
   };
 
-  picturesList.addEventListener(`click`, clickOnPicture);
+  picturesList.addEventListener(`click`, function (evt) {
+    if (evt.target.matches(`.picture__img`)) {
+      evt.preventDefault();
+      clickOnPicture(evt.target.parentNode);
+    }
+  });
 
   picturesList.addEventListener(`keydown`, function (evt) {
     if (evt.key === `Enter`) {
       evt.preventDefault();
-      clickOnPicture(evt);
+      clickOnPicture(evt.target);
     }
   });
 
