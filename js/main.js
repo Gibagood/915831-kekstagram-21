@@ -147,67 +147,48 @@
   const sliderMouseUp = function () {
     if (!imgPreview.classList.contains(`effects__preview--none`)) {
       if (imgPreview.classList.contains(`effects__preview--chrome`)) {
-        if (sliderValuePosition >= 50) {
-          imgPreview.style.filter = `grayscale(1)`;
-        } else {
-          imgPreview.style.filter = `grayscale(0)`;
-        }
+        imgPreview.style.filter = `grayscale(${sliderValuePosition / 100})`;
       }
       if (imgPreview.classList.contains(`effects__preview--sepia`)) {
-        if (sliderValuePosition >= 50) {
-          imgPreview.style.filter = `sepia(1)`;
-        } else {
-          imgPreview.style.filter = `sepia(0)`;
-        }
+        imgPreview.style.filter = `sepia(${sliderValuePosition / 100})`;
       }
       if (imgPreview.classList.contains(`effects__preview--marvin`)) {
         imgPreview.style.filter = `invert(${sliderValuePosition})`;
       }
       if (imgPreview.classList.contains(`effects__preview--phobos`)) {
-        if (sliderValuePosition <= 33) {
-          imgPreview.style.filter = `blur(1px)`;
-        } else if (sliderValuePosition > 33 || sliderValuePosition <= 66) {
-          imgPreview.style.filter = `blur(2px)`;
-        } else if (sliderValuePosition > 66 || sliderValuePosition <= 100) {
-          imgPreview.style.filter = `blur(3px)`;
-        }
+        imgPreview.style.filter = `blur(${1 + (0.02 * sliderValuePosition)}px)`;
       }
       if (imgPreview.classList.contains(`effects__preview--heat`)) {
-        if (sliderValuePosition <= 33) {
-          imgPreview.style.filter = `brightness(1px)`;
-        } else if (sliderValuePosition > 33 || sliderValuePosition <= 66) {
-          imgPreview.style.filter = `brightness(2px)`;
-        } else if (sliderValuePosition > 66 || sliderValuePosition <= 100) {
-          imgPreview.style.filter = `brightness(3px)`;
-        }
+        imgPreview.style.filter = `brightness(${1 + (0.02 * sliderValuePosition)})`;
       }
     } else {
+      imgPreview.style.filter = `none`;
       sliderValue.classList.add(`hidden`);
     }
   };
 
   slider.addEventListener(`mouseup`, sliderMouseUp);
 
-  let SCALE_CONTROL_DEFAULT = 100;
-  scaleControlValue.value = SCALE_CONTROL_DEFAULT + `%`;
+  let scaleControlDefault = 100;
+  scaleControlValue.value = scaleControlDefault + `%`;
   scaleControlSmaller.addEventListener(`click`, function () {
-    if (SCALE_CONTROL_DEFAULT > MIN_SCALE) {
-      scaleControlValue.value = (SCALE_CONTROL_DEFAULT - STEP_SIZE) + `%`;
-      SCALE_CONTROL_DEFAULT = SCALE_CONTROL_DEFAULT - STEP_SIZE;
-      imgPreview.style.transform = `scale(0.${SCALE_CONTROL_DEFAULT})`;
+    if (scaleControlDefault > MIN_SCALE) {
+      scaleControlValue.value = (scaleControlDefault - STEP_SIZE) + `%`;
+      scaleControlDefault = scaleControlDefault - STEP_SIZE;
+      imgPreview.style.transform = `scale(0.${scaleControlDefault})`;
     } else {
       scaleControlValue.value = MIN_SCALE + `%`;
     }
   });
 
   scaleControlBigger.addEventListener(`click`, function () {
-    if (SCALE_CONTROL_DEFAULT < MAX_SCALE) {
-      scaleControlValue.value = (SCALE_CONTROL_DEFAULT + STEP_SIZE) + `%`;
-      SCALE_CONTROL_DEFAULT = SCALE_CONTROL_DEFAULT + STEP_SIZE;
-      if (SCALE_CONTROL_DEFAULT === MAX_SCALE) {
+    if (scaleControlDefault < MAX_SCALE) {
+      scaleControlValue.value = (scaleControlDefault + STEP_SIZE) + `%`;
+      scaleControlDefault = scaleControlDefault + STEP_SIZE;
+      if (scaleControlDefault === MAX_SCALE) {
         imgPreview.style.transform = `scale(1)`;
       } else {
-        imgPreview.style.transform = `scale(0.${SCALE_CONTROL_DEFAULT})`;
+        imgPreview.style.transform = `scale(0.${scaleControlDefault})`;
       }
     } else {
       scaleControlValue.value = MAX_SCALE + `%`;
@@ -289,12 +270,12 @@
 
   hashtagsInput.addEventListener(`input`, function () {
     let hashtagsArray = hashtagsInput.value.trim().split(` `);
-
     if (hashtagsArray.length <= MAX_QANTITY_HASHTAGS) {
       hashtagsArray.forEach(function (item) {
-        const valueLength = item.length;
-
-        if (!HASH_PATTERN.test(item)) {
+        let valueLength = item.length;
+        if (hashtagsArray.length > 1 && hashtagsArray.slice(0, -1).includes(item)) {
+          hashtagsInput.setCustomValidity(`Один и тот же хэш-тег не может быть использован дважды`);
+        } else if (!HASH_PATTERN.test(item)) {
           hashtagsInput.setCustomValidity(`Хэш-тег должен начинаться с символа # (решётка)`);
         } else if (!LETTER_NUM_PATTERN.test(item)) {
           hashtagsInput.setCustomValidity(`Cтрока после решётки должна состоять из букв и чисел и не может содержать пробелы, спецсимволы (#, @, $ и т. п.), символы пунктуации (тире, дефис, запятая и т. п.), эмодзи и т. д.;`);
@@ -308,17 +289,6 @@
       });
     } else {
       hashtagsInput.setCustomValidity(`Нельзя указывать больше пяти хэш-тегов`);
-    }
-    if (hashtagsArray.length > 1) {
-      for (let i = 0; i < hashtagsArray.length; i += 1) {
-        for (let j = i + 1; j < hashtagsArray.length; j += 1) {
-          if (j.value === i.value) {
-            hashtagsInput.setCustomValidity(`Один и тот же хэш-тег не может быть использован дважды`);
-          } else {
-            hashtagsInput.setCustomValidity(``);
-          }
-        }
-      }
     }
     hashtagsInput.reportValidity();
   });
