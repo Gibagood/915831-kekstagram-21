@@ -31,9 +31,35 @@
 
   effectsList.addEventListener(`click`, onEffectsClick);
 
-  const sliderValuePosition = 66;
+  let startCoords;
+  const sliderMouseDown = function (evt) {
+    evt.preventDefault();
+    startCoords = {
+      x: evt.clientX
+    };
+    console.log(startCoords);
+  };
+
+  const sliderMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    let shift = {
+      x: startCoords.x - moveEvt.clientX
+    };
+
+    startCoords = {
+      x: moveEvt.clientX
+    };
+
+    slider.style.left = (slider.offsetLeft - shift.x) + `px`;
+  };
+
+  const sliderValuePosition = 100;
   slider.style.left = sliderValuePosition + `%`;
-  const sliderMouseUp = function () {
+  const sliderMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+
+    document.removeEventListener(`mousemove`, sliderMouseMove);
     if (!window.upload.imgPreview.classList.contains(`effects__preview--none`)) {
       if (window.upload.imgPreview.classList.contains(`effects__preview--chrome`)) {
         window.upload.imgPreview.style.filter = `grayscale(${sliderValuePosition / 100})`;
@@ -56,34 +82,9 @@
     }
   };
 
-  let startCoords;
-  const sliderMouseDown = function (evt) {
-    evt.preventDefault();
-    startCoords = {
-      x: evt.clientX,
-      y: evt.clientY
-    };
-  };
-
-  const onMouseMove = function (moveEvt) {
-    moveEvt.preventDefault();
-
-    let shift = {
-      x: startCoords.x - moveEvt.clientX,
-      y: startCoords.y - moveEvt.clientY
-    };
-
-    startCoords = {
-      x: moveEvt.clientX,
-      y: moveEvt.clientY
-    };
-
-    slider.style.top = (slider.offsetTop - shift.y) + `px`;
-    slider.style.left = (slider.offsetLeft - shift.x) + `px`;
-  };
 
   slider.addEventListener(`mousedown`, sliderMouseDown);
-  document.addEventListener(`mousemove`, onMouseMove);
+  document.addEventListener(`mousemove`, sliderMouseMove);
   slider.addEventListener(`mouseup`, sliderMouseUp);
 
 })();
