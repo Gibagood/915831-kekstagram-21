@@ -5,7 +5,7 @@
   const HASH_PATTERN = /^#/;
   const LETTER_NUM_PATTERN = /^#[0-9a-z]+/i;
   const MAX_QANTITY_HASHTAGS = 5;
-  const hashtagsInput = window.form.formUpload.querySelector(`.text__hashtags`);
+  const hashtagsInput = window.upload.formUpload.querySelector(`.text__hashtags`);
 
   hashtagsInput.addEventListener(`input`, function () {
     let hashtagsArray = hashtagsInput.value.trim().split(` `);

@@ -66,7 +66,7 @@
     }
   });
 
-  window.form = {
+  window.upload = {
     formUpload,
     scaleControlValue,
     imgPreview,

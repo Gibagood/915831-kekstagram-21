@@ -10,31 +10,33 @@
   const commentsLoader = bigPicture.querySelector(`.comments-loader`);
   const bigPictureCancel = bigPicture.querySelector(`.big-picture__cancel`);
 
-  const getComment = function (item) {
-    const newComment = document.createElement(`li`);
-    newComment.classList.add(`social__comment`);
-    const newAvatar = document.createElement(`img`);
-    newComment.appendChild(newAvatar);
-    newAvatar.classList.add(`social__picture`);
-    const newText = document.createElement(`p`);
-    newComment.appendChild(newText);
-    newText.classList.add(`social__text`);
-
-    const commentArr = window.gallery.getCommentArray()[item];
-    newAvatar.alt = commentArr.name;
-    newAvatar.src = commentArr.avatar;
-    newText.textContent = commentArr.message;
-    newAvatar.width = SIZE_AVATAR;
-    newAvatar.height = SIZE_AVATAR;
-    return newComment;
-  };
 
   const getBigPicture = function (item) {
     const post = window.gallery.getPosts(item);
     bigPictureImg.querySelector(`img`).src = post.url;
     bigPicture.querySelector(`.likes-count`).textContent = post.likes;
-    commentsCount.textContent = post.comments;
+    commentsCount.textContent = post.comments.length;
     bigPicture.querySelector(`.social__caption`).textContent = post.description;
+
+
+    const getComment = function (i) {
+      const newComment = document.createElement(`li`);
+      newComment.classList.add(`social__comment`);
+      const newAvatar = document.createElement(`img`);
+      newComment.appendChild(newAvatar);
+      newAvatar.classList.add(`social__picture`);
+      const newText = document.createElement(`p`);
+      newComment.appendChild(newText);
+      newText.classList.add(`social__text`);
+
+      const commentArr = post.comments[i];
+      newAvatar.alt = commentArr.name;
+      newAvatar.src = commentArr.avatar;
+      newText.textContent = commentArr.message;
+      newAvatar.width = SIZE_AVATAR;
+      newAvatar.height = SIZE_AVATAR;
+      return newComment;
+    };
 
     const fragment = document.createDocumentFragment();
     for (let i = 0; i < commentsCount.textContent; i += 1) {
@@ -54,6 +56,9 @@
       socialCommentsCount.classList.remove(`hidden`);
       commentsLoader.classList.remove(`hidden`);
       document.body.classList.remove(`modal-open`);
+      while (socialComments.firstChild) {
+        socialComments.removeChild(socialComments.firstChild);
+      }
     };
     bigPictureCancel.addEventListener(`click`, function () {
       closeBigPicture();

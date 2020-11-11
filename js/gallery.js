@@ -6,7 +6,7 @@
   const MAX_LIKES = 200;
   const NAMES = [`Ozzy`, `Billy`, `Jimmy`, `Paul`, `John`, `Till`, `James`, `Flea`];
   const MESSAGES = [`Всё отлично!`, `В целом всё неплохо. Но не всё.`, `Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.`, `Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.`, `Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.`, `Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!`];
-  const MIN_COMMENTS = 3;
+  const MIN_COMMENTS = 1;
   const MAX_COMMENTS = 5;
   const picturesList = document.querySelector(`.pictures`);
   const pictureTemplate = document.querySelector(`#picture`)
@@ -31,7 +31,7 @@
       url: `photos/${item}.jpg`,
       description: `описание фотографии`,
       likes: window.data.getRandomNumber(MIN_LIKES, MAX_LIKES),
-      comments: getCommentArray().length,
+      comments: getCommentArray(),
       id: item,
     };
     return post;
@@ -41,7 +41,7 @@
     const post = getPosts(item);
     const pictureElement = pictureTemplate.cloneNode(true);
     pictureElement.querySelector(`.picture__img`).src = post.url;
-    pictureElement.querySelector(`.picture__comments`).textContent = post.comments;
+    pictureElement.querySelector(`.picture__comments`).textContent = post.comments.length;
     pictureElement.querySelector(`.picture__likes`).textContent = post.likes;
     pictureElement.id = post.id;
     return pictureElement;
