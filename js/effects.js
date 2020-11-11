@@ -56,6 +56,34 @@
     }
   };
 
+  let startCoords;
+  const sliderMouseDown = function (evt) {
+    evt.preventDefault();
+    startCoords = {
+      x: evt.clientX,
+      y: evt.clientY
+    };
+  };
+
+  const onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    let shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    slider.style.top = (slider.offsetTop - shift.y) + `px`;
+    slider.style.left = (slider.offsetLeft - shift.x) + `px`;
+  };
+
+  slider.addEventListener(`mousedown`, sliderMouseDown);
+  document.addEventListener(`mousemove`, onMouseMove);
   slider.addEventListener(`mouseup`, sliderMouseUp);
 
 })();
