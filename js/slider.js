@@ -3,9 +3,10 @@
 (function () {
   const sliderLine = window.upload.formUpload.querySelector(`.effect-level__line`);
   const slider = sliderLine.querySelector(`.effect-level__pin`);
-  const sliderLevel = sliderLine.querySelector(`.effect-level__line`);
+  const sliderLevel = sliderLine.querySelector(`.effect-level__depth`);
   const sliderValue = window.upload.formUpload.querySelector(`.effect-level__value`);
   let sliderValuePosition = 100;
+  sliderLevel.style.width = 100 + `%`;
 
   slider.style.left = sliderValuePosition + `%`;
 
@@ -16,7 +17,7 @@
     };
 
     const sliderMouseMove = function (moveEvt) {
-      let xPosition = slider.getBoundingClientRect().left - sliderLine.getBoundingClientRect().left;
+      let xPosition = (slider.getBoundingClientRect().left - sliderLine.getBoundingClientRect().left);
 
       moveEvt.preventDefault();
 
@@ -28,10 +29,14 @@
         x: moveEvt.clientX
       };
 
-      console.log(slider.getBoundingClientRect().left - sliderLine.getBoundingClientRect().left);
-      if (xPosition > -7 && xPosition < 445) {
+      if (xPosition >= 0 && xPosition <= 445) {
         slider.style.left = (slider.offsetLeft - shift.x) + `px`;
         sliderValuePosition = slider.offsetLeft - shift.x;
+        sliderLevel.style.width = (slider.offsetLeft - shift.x) + `px`;
+      } else if (xPosition < 0) {
+        slider.style.left = 10 + `px`;
+      } else if (xPosition > 445) {
+        slider.style.left = 435 + `px`;
       }
     };
 
