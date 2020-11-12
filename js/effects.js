@@ -2,8 +2,6 @@
 
 (function () {
   const effectsList = window.upload.formUpload.querySelector(`.effects__list`);
-  const slider = window.upload.formUpload.querySelector(`.effect-level__pin`);
-  const sliderValue = window.upload.formUpload.querySelector(`.effect-level__value`);
 
   const effectsClasses = [
     `effects__preview--none`,
@@ -30,61 +28,4 @@
   };
 
   effectsList.addEventListener(`click`, onEffectsClick);
-
-  let startCoords;
-  const sliderMouseDown = function (evt) {
-    evt.preventDefault();
-    startCoords = {
-      x: evt.clientX
-    };
-    console.log(startCoords);
-  };
-
-  const sliderMouseMove = function (moveEvt) {
-    moveEvt.preventDefault();
-
-    let shift = {
-      x: startCoords.x - moveEvt.clientX
-    };
-
-    startCoords = {
-      x: moveEvt.clientX
-    };
-
-    slider.style.left = (slider.offsetLeft - shift.x) + `px`;
-  };
-
-  const sliderValuePosition = 100;
-  slider.style.left = sliderValuePosition + `%`;
-  const sliderMouseUp = function (upEvt) {
-    upEvt.preventDefault();
-
-    document.removeEventListener(`mousemove`, sliderMouseMove);
-    if (!window.upload.imgPreview.classList.contains(`effects__preview--none`)) {
-      if (window.upload.imgPreview.classList.contains(`effects__preview--chrome`)) {
-        window.upload.imgPreview.style.filter = `grayscale(${sliderValuePosition / 100})`;
-      }
-      if (window.upload.imgPreview.classList.contains(`effects__preview--sepia`)) {
-        window.upload.imgPreview.style.filter = `sepia(${sliderValuePosition / 100})`;
-      }
-      if (window.upload.imgPreview.classList.contains(`effects__preview--marvin`)) {
-        window.upload.imgPreview.style.filter = `invert(${sliderValuePosition})`;
-      }
-      if (window.upload.imgPreview.classList.contains(`effects__preview--phobos`)) {
-        window.upload.imgPreview.style.filter = `blur(${1 + (0.02 * sliderValuePosition)}px)`;
-      }
-      if (window.upload.imgPreview.classList.contains(`effects__preview--heat`)) {
-        window.upload.imgPreview.style.filter = `brightness(${1 + (0.02 * sliderValuePosition)})`;
-      }
-    } else {
-      window.upload.imgPreview.style.filter = `none`;
-      sliderValue.classList.add(`hidden`);
-    }
-  };
-
-
-  slider.addEventListener(`mousedown`, sliderMouseDown);
-  document.addEventListener(`mousemove`, sliderMouseMove);
-  slider.addEventListener(`mouseup`, sliderMouseUp);
-
 })();
