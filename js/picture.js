@@ -74,6 +74,7 @@
     getBigPicture(evt.id);
   };
 
+
   window.gallery.picturesList.addEventListener(`click`, function (evt) {
     if (evt.target.matches(`.picture__img`)) {
       evt.preventDefault();
