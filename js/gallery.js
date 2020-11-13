@@ -26,36 +26,42 @@
     return newComments;
   };
 
-  const getPosts = function (item) {
+/*   const getPosts = function (item) {
+
+    console.log(item.url);
     const post = {
-      url: `photos/${item}.jpg`,
-      description: `описание фотографии`,
-      likes: window.data.getRandomNumber(MIN_LIKES, MAX_LIKES),
-      comments: getCommentArray(),
-      id: item,
+      url: item.url,
+      description: item.description,
+      likes: item.likes,
+      comments: item.comments,
+      id: 1,
     };
     return post;
-  };
+  }; */
 
   const getRenderPicture = function (item) {
-    const post = getPosts(item);
+      console.log(item[1]);
+    /* const post = getPosts(item); */
     const pictureElement = pictureTemplate.cloneNode(true);
-    pictureElement.querySelector(`.picture__img`).src = post.url;
-    pictureElement.querySelector(`.picture__comments`).textContent = post.comments.length;
-    pictureElement.querySelector(`.picture__likes`).textContent = post.likes;
-    pictureElement.id = post.id;
+    pictureElement.querySelector(`.picture__img`).src = item[1].url;
+    pictureElement.querySelector(`.picture__comments`).textContent = item[1].comments.length;
+    pictureElement.querySelector(`.picture__likes`).textContent = item[1].likes;
+    /* pictureElement.id = item.id; */
     return pictureElement;
   };
 
-  const fragment = document.createDocumentFragment();
-  for (let i = 1; i <= QUANTITY_IMG; i += 1) {
-    fragment.appendChild(getRenderPicture(i));
-  }
-  picturesList.appendChild(fragment);
+  window.load(function (img) {
+    const fragment = document.createDocumentFragment();
+    for (let i = 0; i <= QUANTITY_IMG; i += 1) {
+      fragment.appendChild(getRenderPicture(img));
+    }
+    picturesList.appendChild(fragment);
+  }, function () {});
+
 
   window.gallery = {
     getCommentArray,
-    getPosts,
+    /* getPosts, */
     picturesList,
   };
 })();

@@ -2,6 +2,7 @@
 
 (function () {
   const effectsList = window.upload.formUpload.querySelector(`.effects__list`);
+  const effectField = window.upload.formUpload.querySelector(`.img-upload__effect-level`);
 
   const effectsClasses = [
     `effects__preview--none`,
@@ -25,6 +26,7 @@
         window.upload.imgPreview.classList.add(anotherClass);
 
         if (!window.upload.imgPreview.classList.contains(`effects__preview--none`)) {
+          effectField.classList.remove(`hidden`);
           if (window.upload.imgPreview.classList.contains(`effects__preview--chrome`)) {
             window.upload.imgPreview.style.filter = `grayscale(1)`;
           }
@@ -42,6 +44,7 @@
           }
         } else {
           window.upload.imgPreview.style.filter = `none`;
+          effectField.classList.add(`hidden`);
         }
       });
     }
