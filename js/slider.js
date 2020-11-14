@@ -1,10 +1,12 @@
 'use strict';
 
 (function () {
-  const sliderLine = window.upload.formUpload.querySelector(`.effect-level__line`);
+  const MAX_SLIDER_POSITION = 445;
+  const SLIDER_WIDTH = 10;
+  const sliderLine = window.modal.formUpload.querySelector(`.effect-level__line`);
   const slider = sliderLine.querySelector(`.effect-level__pin`);
   const sliderLevel = sliderLine.querySelector(`.effect-level__depth`);
-  const sliderValue = window.upload.formUpload.querySelector(`.effect-level__value`);
+  const sliderValue = window.modal.formUpload.querySelector(`.effect-level__value`);
   let sliderValuePosition = 100;
   sliderLevel.style.width = 100 + `%`;
 
@@ -29,38 +31,42 @@
         x: moveEvt.clientX
       };
 
-      if (xPosition >= 0 && xPosition <= 445) {
+      if (xPosition >= 0 && xPosition <= MAX_SLIDER_POSITION) {
         slider.style.left = (slider.offsetLeft - shift.x) + `px`;
         sliderValuePosition = slider.offsetLeft - shift.x;
         sliderLevel.style.width = (slider.offsetLeft - shift.x) + `px`;
       } else if (xPosition < 0) {
-        slider.style.left = 10 + `px`;
-      } else if (xPosition > 445) {
-        slider.style.left = 435 + `px`;
+        slider.style.left = SLIDER_WIDTH + `px`;
+        sliderLevel.style.width = SLIDER_WIDTH + `px`;
+        document.removeEventListener(`mousemove`, sliderMouseMove);
+      } else if (xPosition > MAX_SLIDER_POSITION) {
+        slider.style.left = MAX_SLIDER_POSITION + SLIDER_WIDTH + `px`;
+        sliderLevel.style.width = MAX_SLIDER_POSITION + SLIDER_WIDTH + `px`;
+        document.removeEventListener(`mousemove`, sliderMouseMove);
       }
     };
 
     const sliderMouseUp = function (upEvt) {
       upEvt.preventDefault();
 
-      if (!window.upload.imgPreview.classList.contains(`effects__preview--none`)) {
-        if (window.upload.imgPreview.classList.contains(`effects__preview--chrome`)) {
-          window.upload.imgPreview.style.filter = `grayscale(${sliderValuePosition / 100})`;
+      if (!window.modal.imgPreview.classList.contains(`effects__preview--none`)) {
+        if (window.modal.imgPreview.classList.contains(`effects__preview--chrome`)) {
+          window.modal.imgPreview.style.filter = `grayscale(${sliderValuePosition / MAX_SLIDER_POSITION})`;
         }
-        if (window.upload.imgPreview.classList.contains(`effects__preview--sepia`)) {
-          window.upload.imgPreview.style.filter = `sepia(${sliderValuePosition / 100})`;
+        if (window.modal.imgPreview.classList.contains(`effects__preview--sepia`)) {
+          window.modal.imgPreview.style.filter = `sepia(${sliderValuePosition / MAX_SLIDER_POSITION})`;
         }
-        if (window.upload.imgPreview.classList.contains(`effects__preview--marvin`)) {
-          window.upload.imgPreview.style.filter = `invert(${sliderValuePosition})`;
+        if (window.modal.imgPreview.classList.contains(`effects__preview--marvin`)) {
+          window.modal.imgPreview.style.filter = `invert(${(sliderValuePosition * 100) / MAX_SLIDER_POSITION}%)`;
         }
-        if (window.upload.imgPreview.classList.contains(`effects__preview--phobos`)) {
-          window.upload.imgPreview.style.filter = `blur(${1 + (0.02 * sliderValuePosition)}px)`;
+        if (window.modal.imgPreview.classList.contains(`effects__preview--phobos`)) {
+          window.modal.imgPreview.style.filter = `blur(${1 + (0.004 * sliderValuePosition)}px)`;
         }
-        if (window.upload.imgPreview.classList.contains(`effects__preview--heat`)) {
-          window.upload.imgPreview.style.filter = `brightness(${1 + (0.02 * sliderValuePosition)})`;
+        if (window.modal.imgPreview.classList.contains(`effects__preview--heat`)) {
+          window.modal.imgPreview.style.filter = `brightness(${1 + (0.004 * sliderValuePosition)})`;
         }
       } else {
-        window.upload.imgPreview.style.filter = `none`;
+        window.modal.imgPreview.style.filter = `none`;
         sliderValue.classList.add(`hidden`);
       }
       document.removeEventListener(`mousemove`, sliderMouseMove);
@@ -71,4 +77,10 @@
     document.addEventListener(`mouseup`, sliderMouseUp);
 
   });
+
+  window.slider = {
+    sliderValuePosition,
+    sliderLevel,
+    slider,
+  };
 })();

@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  const picturesLoad = [];
   const picturesList = document.querySelector(`.pictures`);
   const pictureTemplate = document.querySelector(`#picture`)
     .content
@@ -30,13 +31,14 @@
     const fragment = document.createDocumentFragment();
     img.forEach(function (item, index) {
       fragment.appendChild(getRenderPicture(item, index));
+      picturesLoad.push(item);
     });
     picturesList.appendChild(fragment);
   }, function () {});
 
-
   window.gallery = {
     getPosts,
     picturesList,
+    picturesLoad
   };
 })();
