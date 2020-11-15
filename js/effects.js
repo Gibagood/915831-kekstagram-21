@@ -17,9 +17,9 @@
   const onEffectsClick = function (evt) {
     const target = evt.target;
     let anotherClass;
-    window.slider.sliderValuePosition = 100;
-    window.slider.sliderLevel.style.width = 100 + `%`;
-    window.slider.slider.style.left = window.slider.sliderValuePosition + `%`;
+    window.effectlevel.sliderValuePosition = 100;
+    window.effectlevel.sliderLevel.style.width = 100 + `%`;
+    window.effectlevel.slider.style.left = window.effectlevel.sliderValuePosition + `%`;
     if (evt.target.matches(`span`)) {
       let classes = target.classList;
       anotherClass = classes.item(classes.length - 1);

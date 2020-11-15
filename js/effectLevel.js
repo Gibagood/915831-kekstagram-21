@@ -40,7 +40,7 @@
         sliderLevel.style.width = SLIDER_WIDTH + `px`;
         document.removeEventListener(`mousemove`, sliderMouseMove);
       } else if (xPosition > MAX_SLIDER_POSITION) {
-        slider.style.left = MAX_SLIDER_POSITION + SLIDER_WIDTH + `px`;
+        slider.style.left = MAX_SLIDER_POSITION + `px`;
         sliderLevel.style.width = MAX_SLIDER_POSITION + SLIDER_WIDTH + `px`;
         document.removeEventListener(`mousemove`, sliderMouseMove);
       }
@@ -78,7 +78,7 @@
 
   });
 
-  window.slider = {
+  window.effectlevel = {
     sliderValuePosition,
     sliderLevel,
     slider,

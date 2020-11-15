@@ -5,7 +5,7 @@
   const imgPreview = formUpload.querySelector(`.img-upload__preview`);
   const fileInput = document.querySelector(`#upload-file`);
   const buttonUploadCancel = document.querySelector(`#upload-cancel`);
-  const textDescription = document.querySelector(`.text__description`);
+  const imgUploadForm = document.querySelector(`.img-upload__form`);
 
 
   fileInput.addEventListener(`change`, function () {
@@ -17,22 +17,14 @@
       formUpload.classList.add(`hidden`);
       document.body.classList.remove(`modal-open`);
       fileInput.value = ``;
+      imgUploadForm.reset();
     };
 
     buttonUploadCancel.addEventListener(`click`, function () {
       closeFileInput();
     });
 
-    const onEscapeInInputClick = document.addEventListener(`keydown`, function (evt) {
-      if (evt.key === `Escape`) {
-        evt.preventDefault();
-        closeFileInput();
-      }
-    });
-
-    textDescription.addEventListener(`onblur`, onEscapeInInputClick);
   });
-
 
   window.modal = {
     formUpload,
