@@ -19,7 +19,11 @@
       commentsLoader.classList.remove(`hidden`);
       for (let z = 0; z <= elList.length - 1; z += 1) {
         if (z > COMMENTS_QANTITY) {
-          socialComments.children[z].classList.add(`hidden`);
+          if (socialComments.children[z].classList.contains(`hidden`)) {
+            socialComments.children[z].classList.remove(`hidden`);
+          } else {
+            socialComments.children[z].classList.add(`hidden`);
+          }
         } else {
           socialComments.children[z].classList.remove(`hidden`);
         }
