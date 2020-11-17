@@ -24,6 +24,13 @@
       closeFileInput();
     });
 
+    imgUploadForm.addEventListener(`submit`, function (evt) {
+      window.upload(new FormData(imgUploadForm), function () {
+        closeFileInput();
+      });
+      evt.preventDefault();
+    });
+
   });
 
   window.modal = {
