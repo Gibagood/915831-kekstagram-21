@@ -33,45 +33,42 @@
       closeFileInput();
     });
 
-
     imgUploadForm.addEventListener(`submit`, function (evt) {
       window.upload(new FormData(imgUploadForm), function () {
         closeFileInput();
       });
       evt.preventDefault();
     });
-
-
-    const closeModal = function () {
-      window.modal.imgUploadForm.reset();
-      window.modal.fileInput.value = ``;
-    };
-
-    window.successHandler = function () {
-      const fragment = document.createDocumentFragment();
-      const successElement = successTemplate.cloneNode(true);
-      fragment.appendChild(successElement);
-      document.querySelector(`main`).appendChild(fragment);
-      successButton.addEventListener(`click`, function (evt) {
-        evt.preventDefault();
-        successTemplate.remove();
-        closeModal();
-      });
-    };
-
-
-    window.errorHandler = function () {
-      const fragment = document.createDocumentFragment();
-      const errorElement = errorTemplate.cloneNode(true);
-      fragment.appendChild(errorElement);
-      document.querySelector(`main`).appendChild(fragment);
-      errorButton.addEventListener(`click`, function () {
-        errorTemplate.classList.add(`hidden`);
-        closeModal();
-      });
-    };
   });
 
+
+  const closeModal = function () {
+    window.modal.imgUploadForm.reset();
+    window.modal.fileInput.value = ``;
+  };
+
+  window.successHandler = function () {
+    const fragment = document.createDocumentFragment();
+    const successElement = successTemplate.cloneNode(true);
+    fragment.appendChild(successElement);
+    document.querySelector(`main`).appendChild(fragment);
+    successButton.addEventListener(`click`, function (evt) {
+      evt.preventDefault();
+      successTemplate.remove();
+      closeModal();
+    });
+  };
+
+  window.errorHandler = function () {
+    const fragment = document.createDocumentFragment();
+    const errorElement = errorTemplate.cloneNode(true);
+    fragment.appendChild(errorElement);
+    document.querySelector(`main`).appendChild(fragment);
+    errorButton.addEventListener(`click`, function () {
+      errorTemplate.classList.add(`hidden`);
+      closeModal();
+    });
+  };
   window.modal = {
     formUpload,
     imgPreview,
