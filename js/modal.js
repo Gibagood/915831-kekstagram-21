@@ -55,10 +55,9 @@
     window.effects.effectField.classList.add(`hidden`);
     fileInput.value = ``;
     imgUploadForm.reset();
+    const main = document.querySelector(`main`);
     const successMesage = document.querySelector(`.success`);
-    if (successMesage.parentNode) {
-      successMesage.parentNode.removeChild(successMesage);
-    }
+    main.removeChild(successMesage);
   };
 
   window.successHandler = function () {
