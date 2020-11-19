@@ -82,5 +82,6 @@
     sliderValuePosition,
     sliderLevel,
     slider,
+    MAX_SLIDER_POSITION,
   };
 })();

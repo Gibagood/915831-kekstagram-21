@@ -35,6 +35,7 @@
   });
 
   window.sizeImage = {
+    MAX_SCALE,
     scaleControlValue,
   };
 })();

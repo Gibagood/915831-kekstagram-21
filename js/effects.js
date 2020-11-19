@@ -55,4 +55,8 @@
   };
 
   effectsList.addEventListener(`click`, onEffectsClick);
+
+  window.effects = {
+    effectField,
+  };
 })();
