@@ -21,6 +21,8 @@
     window.sizeImage.scaleControlValue.value = `100%`;
 
     const closeFileInput = function () {
+      const successMessage = document.querySelector(`.success`);
+      successMessage.classList.remove(`hidden`);
       window.modal.imgPreview.style.filter = `none`;
       window.modal.imgPreview.style.transform = `scale(1)`;
       formUpload.classList.add(`hidden`);
@@ -50,8 +52,8 @@
         closeFileInput();
       });
       evt.preventDefault();
-      FormData.delete();
-      console.log(formData);
+      formData.delete(imgUploadForm);
+      console.log();
     });
   });
 
@@ -62,7 +64,8 @@
     fileInput.value = ``;
     imgUploadForm.reset();
     const successMessage = document.querySelector(`.success`);
-    successMessage.parentNode.removeChild(successMessage);
+    /* successMessage.parentNode.removeChild(successMessage); */
+    successMessage.classList.add(`hidden`);
   };
 
   const clickOnButton = function (evt) {
@@ -86,11 +89,17 @@
     }
   };
 
-  window.successHandler = function () {
+  const successModal = function () {
     const fragment = document.createDocumentFragment();
     const successElement = successTemplate.cloneNode(true);
     fragment.appendChild(successElement);
     document.querySelector(`main`).appendChild(fragment);
+    const successMessage = document.querySelector(`.success`);
+    successMessage.classList.add(`hidden`);
+  };
+
+  successModal();
+  window.successHandler = function () {
 
     document.addEventListener(`click`, clickOnButton);/*
     document.querySelector(`.success`).addEventListener(`click`, clickAround); */
