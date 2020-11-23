@@ -28,11 +28,14 @@
       document.body.classList.remove(`modal-open`);
       fileInput.value = ``;
       imgUploadForm.reset();
+      buttonUploadCancel.removeEventListener(`click`, closebuttonUploadCancel);
     };
 
-    buttonUploadCancel.addEventListener(`click`, function () {
+    const closebuttonUploadCancel = function (evt) {
+      evt.preventDefault();
       closeFileInput();
-    });
+    };
+    buttonUploadCancel.addEventListener(`click`, closebuttonUploadCancel);
 
     document.addEventListener(`keydown`, function (evt) {
       if (evt.key === `Escape`) {
@@ -42,9 +45,13 @@
     });
 
     imgUploadForm.addEventListener(`submit`, function (evt) {
-      window.upload(new FormData(imgUploadForm), function () {
+      let formData = new FormData(imgUploadForm);
+      window.upload(formData, function () {
         closeFileInput();
       });
+      console.log(formData);
+      formData.delete(imgUploadForm);
+      console.log(formData);
       evt.preventDefault();
     });
   });
@@ -55,9 +62,29 @@
     window.effects.effectField.classList.add(`hidden`);
     fileInput.value = ``;
     imgUploadForm.reset();
-    const main = document.querySelector(`main`);
-    const successMesage = document.querySelector(`.success`);
-    main.removeChild(successMesage);
+    const successMessage = document.querySelector(`.success`);
+    successMessage.parentNode.removeChild(successMessage);
+  };
+
+  const clickOnButton = function (evt) {
+    if (evt.target.matches(`.success__button`)) {
+      evt.preventDefault();
+      closeMessage();
+    }
+  };
+
+  /* const clickAround = function (evt) {
+    if (!evt.target.matches(`.success__inner`)) {
+      evt.preventDefault();
+      closeMessage();
+    }
+  }; */
+
+  const clickEsc = function (evt) {
+    if (evt.key === `Escape`) {
+      evt.preventDefault();
+      closeMessage();
+    }
   };
 
   window.successHandler = function () {
@@ -65,26 +92,10 @@
     const successElement = successTemplate.cloneNode(true);
     fragment.appendChild(successElement);
     document.querySelector(`main`).appendChild(fragment);
-    document.addEventListener(`click`, function (evt) {
-      if (evt.target.matches(`.success__button`)) {
-        evt.preventDefault();
-        closeMessage();
-      }
-    });
 
-    document.querySelector(`.success`).addEventListener(`click`, function (evt) {
-      if (!evt.target.matches(`.success__inner`)) {
-        evt.preventDefault();
-        closeMessage();
-      }
-    });
-
-    document.addEventListener(`keydown`, function (evt) {
-      if (evt.key === `Escape`) {
-        evt.preventDefault();
-        closeMessage();
-      }
-    });
+    document.addEventListener(`click`, clickOnButton);/*
+    document.querySelector(`.success`).addEventListener(`click`, clickAround); */
+    document.addEventListener(`keydown`, clickEsc);
   };
 
   window.errorHandler = function () {
