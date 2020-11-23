@@ -49,10 +49,9 @@
       window.upload(formData, function () {
         closeFileInput();
       });
-      console.log(formData);
-      formData.delete(imgUploadForm);
-      console.log(formData);
       evt.preventDefault();
+      FormData.delete();
+      console.log(formData);
     });
   });
 
