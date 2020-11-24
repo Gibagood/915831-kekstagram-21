@@ -14,11 +14,15 @@
 
   const showCommentsQuantity = function () {
     const elList = socialComments.children;
+    let quantityClassHidden = socialComments.getElementsByClassName(`hidden`);
+    console.log(quantityClassHidden.length);
+    console.log(elList.length - quantityClassHidden.length);
     if (elList.length >= COMMENTS_QANTITY) {
       socialCommentsCount.classList.remove(`hidden`);
       commentsLoader.classList.remove(`hidden`);
-      for (let z = 0; z <= elList.length - 1; z += 1) {
-        if (z >= COMMENTS_QANTITY) {
+      let currentQuantityClassHidden = quantityClassHidden.length;
+      for (let z = elList.length - currentQuantityClassHidden; z <= (elList.length - currentQuantityClassHidden) + COMMENTS_QANTITY; z += 1) {
+        if (z >= COMMENTS_QANTITY && z) {
           if (socialComments.children[z].classList.contains(`hidden`)) {
             socialComments.children[z].classList.remove(`hidden`);
           } else {

@@ -21,8 +21,6 @@
     window.sizeImage.scaleControlValue.value = `100%`;
 
     const closeFileInput = function () {
-      const successMessage = document.querySelector(`.success`);
-      successMessage.classList.remove(`hidden`);
       window.modal.imgPreview.style.filter = `none`;
       window.modal.imgPreview.style.transform = `scale(1)`;
       formUpload.classList.add(`hidden`);
@@ -30,21 +28,23 @@
       document.body.classList.remove(`modal-open`);
       fileInput.value = ``;
       imgUploadForm.reset();
-      buttonUploadCancel.removeEventListener(`click`, closebuttonUploadCancel);
+      buttonUploadCancel.removeEventListener(`click`, closeButtonUploadCancel);
+      document.removeEventListener(`keydown`, closeEscUploadCancel);
     };
 
-    const closebuttonUploadCancel = function (evt) {
+    const closeButtonUploadCancel = function (evt) {
       evt.preventDefault();
       closeFileInput();
     };
-    buttonUploadCancel.addEventListener(`click`, closebuttonUploadCancel);
+    buttonUploadCancel.addEventListener(`click`, closeButtonUploadCancel);
 
-    document.addEventListener(`keydown`, function (evt) {
+    const closeEscUploadCancel = function (evt) {
       if (evt.key === `Escape`) {
         evt.preventDefault();
         closeFileInput();
       }
-    });
+    };
+    document.addEventListener(`keydown`, closeEscUploadCancel);
 
     imgUploadForm.addEventListener(`submit`, function (evt) {
       let formData = new FormData(imgUploadForm);
@@ -53,7 +53,6 @@
       });
       evt.preventDefault();
       formData.delete(imgUploadForm);
-      console.log();
     });
   });
 
@@ -64,8 +63,9 @@
     fileInput.value = ``;
     imgUploadForm.reset();
     const successMessage = document.querySelector(`.success`);
-    /* successMessage.parentNode.removeChild(successMessage); */
     successMessage.classList.add(`hidden`);
+    const errorMessage = document.querySelector(`.error`);
+    errorMessage.classList.add(`hidden`);
   };
 
   const clickOnButton = function (evt) {
@@ -75,12 +75,12 @@
     }
   };
 
-  /* const clickAround = function (evt) {
+  const clickAround = function (evt) {
     if (!evt.target.matches(`.success__inner`)) {
       evt.preventDefault();
       closeMessage();
     }
-  }; */
+  };
 
   const clickEsc = function (evt) {
     if (evt.key === `Escape`) {
@@ -100,35 +100,39 @@
 
   successModal();
   window.successHandler = function () {
-
-    document.addEventListener(`click`, clickOnButton);/*
-    document.querySelector(`.success`).addEventListener(`click`, clickAround); */
+    document.addEventListener(`click`, clickOnButton);
+    document.querySelector(`.success`).addEventListener(`click`, clickAround);
     document.addEventListener(`keydown`, clickEsc);
   };
 
-  window.errorHandler = function () {
+  const clickOnAnotherLoad = function (evt) {
+    if (evt.target.matches(`.error__button`)) {
+      evt.preventDefault();
+      closeMessage();
+    }
+  };
+
+  const clickArroundError = function (evt) {
+    if (!evt.target.matches(`.error__inner`)) {
+      evt.preventDefault();
+      closeMessage();
+    }
+  };
+
+  const errorModal = function () {
     const fragment = document.createDocumentFragment();
     const errorElement = errorTemplate.cloneNode(true);
     fragment.appendChild(errorElement);
     document.querySelector(`main`).appendChild(fragment);
-    document.addEventListener(`click`, function (evt) {
-      if (evt.target.matches(`.error__button`)) {
-        evt.preventDefault();
-        closeMessage();
-      }
-    });
-    document.addEventListener(`keydown`, function (evt) {
-      if (evt.key === `Escape`) {
-        evt.preventDefault();
-        closeMessage();
-      }
-    });
-    document.querySelector(`.error`).addEventListener(`click`, function (evt) {
-      if (!evt.target.matches(`.error__inner`)) {
-        evt.preventDefault();
-        closeMessage();
-      }
-    });
+    const errorMessage = document.querySelector(`.error`);
+    errorMessage.classList.add(`hidden`);
+  };
+
+  errorModal();
+  window.errorHandler = function () {
+    document.addEventListener(`click`, clickOnAnotherLoad);
+    document.addEventListener(`keydown`, clickEsc);
+    document.querySelector(`.error`).addEventListener(`click`, clickArroundError);
   };
 
   window.modal = {
