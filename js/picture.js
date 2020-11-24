@@ -14,15 +14,11 @@
 
   const showCommentsQuantity = function () {
     const elList = socialComments.children;
-    let quantityClassHidden = socialComments.getElementsByClassName(`hidden`);
-    console.log(quantityClassHidden.length);
-    console.log(elList.length - quantityClassHidden.length);
     if (elList.length >= COMMENTS_QANTITY) {
       socialCommentsCount.classList.remove(`hidden`);
       commentsLoader.classList.remove(`hidden`);
-      let currentQuantityClassHidden = quantityClassHidden.length;
-      for (let z = elList.length - currentQuantityClassHidden; z <= (elList.length - currentQuantityClassHidden) + COMMENTS_QANTITY; z += 1) {
-        if (z >= COMMENTS_QANTITY && z) {
+      for (let z = 0; z <= elList.length - 1; z += 1) {
+        if (z >= COMMENTS_QANTITY) {
           if (socialComments.children[z].classList.contains(`hidden`)) {
             socialComments.children[z].classList.remove(`hidden`);
           } else {
@@ -33,6 +29,20 @@
         }
       }
     } else {
+      socialCommentsCount.classList.add(`hidden`);
+      commentsLoader.classList.add(`hidden`);
+    }
+  };
+
+  const showCommentsQuantityMore = function () {
+    const elList = socialComments.children;
+    let quantityClassHidden = socialComments.getElementsByClassName(`hidden`);
+    let currentQuantityClassHidden = quantityClassHidden.length;
+    for (let z = (elList.length) - currentQuantityClassHidden; z < ((elList.length - 1) - currentQuantityClassHidden) + COMMENTS_QANTITY; z += 1) {
+      console.log(socialComments.children[z]);
+      socialComments.children[z].classList.remove(`hidden`);
+    }
+    if (quantityClassHidden.length < 0) {
       socialCommentsCount.classList.add(`hidden`);
       commentsLoader.classList.add(`hidden`);
     }
@@ -99,6 +109,11 @@
     });
 
     getBigPicture(evt.id);
+
+    commentsLoader.addEventListener(`click`, function (e) {
+      e.preventDefault();
+      showCommentsQuantityMore();
+    });
   };
 
 
@@ -116,8 +131,4 @@
     }
   });
 
-  commentsLoader.addEventListener(`click`, function (evt) {
-    evt.preventDefault();
-    showCommentsQuantity();
-  });
 })();
