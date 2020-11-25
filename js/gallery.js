@@ -21,7 +21,7 @@
     const post = getPosts(item);
     const pictureElement = pictureTemplate.cloneNode(true);
     pictureElement.querySelector(`.picture__img`).src = post.url;
-    pictureElement.querySelector(`.picture__comments`).textContent = post.comments.length;
+    pictureElement.querySelector(`.picture__comments`).textContent = post.comments.length - 1;
     pictureElement.querySelector(`.picture__likes`).textContent = post.likes;
     pictureElement.id = index + 1;
     return pictureElement;
