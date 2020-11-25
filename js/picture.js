@@ -34,18 +34,23 @@
     }
   };
 
+  const getMoreComment = function (e) {
+    e.preventDefault();
+    showCommentsQuantityMore();
+  };
+
   const showCommentsQuantityMore = function () {
     let quantityClassHidden = socialComments.getElementsByClassName(`hidden`);
     let currentQuantityClassHidden = quantityClassHidden.length;
-    console.log(currentQuantityClassHidden);
-    for (let z = ((elList.length) - currentQuantityClassHidden) + 1; z < ((elList.length) - currentQuantityClassHidden) + COMMENTS_QANTITY; z += 1) {
+    for (let z = elList.length - currentQuantityClassHidden + 1; z <= (elList.length - currentQuantityClassHidden) + COMMENTS_QANTITY; z += 1) {
       if (z >= elList.length) {
         socialCommentsCount.classList.add(`hidden`);
         commentsLoader.classList.add(`hidden`);
+        commentsLoader.removeEventListener(`click`, getMoreComment);
         break;
       } else {
         socialComments.children[z].classList.remove(`hidden`);
-        socialCommentsCount.textContent = `${((elList.length) - currentQuantityClassHidden) + COMMENTS_QANTITY} из ${commentsCount.textContent} комментариев`;
+        socialCommentsCount.textContent = `${(elList.length - currentQuantityClassHidden) + COMMENTS_QANTITY} из ${commentsCount.textContent} комментариев`;
       }
     }
   };
@@ -112,10 +117,7 @@
 
     getBigPicture(evt.id);
 
-    commentsLoader.addEventListener(`click`, function (e) {
-      e.preventDefault();
-      showCommentsQuantityMore();
-    });
+    commentsLoader.addEventListener(`click`, getMoreComment);
   };
 
 
