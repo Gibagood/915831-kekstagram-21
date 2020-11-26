@@ -27,10 +27,14 @@
     return pictureElement;
   };
 
+  const filterPictures = function (item, index) {
+    getRenderPicture(item, index);
+  };
+
   window.load(function (img) {
     const fragment = document.createDocumentFragment();
     img.forEach(function (item, index) {
-      fragment.appendChild(getRenderPicture(item, index));
+      fragment.appendChild(filterPictures(item, index));
       picturesLoad.push(item);
     });
     picturesList.appendChild(fragment);
