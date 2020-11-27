@@ -3,6 +3,8 @@
 (function () {
   const picturesLoad = [];
   const picturesList = document.querySelector(`.pictures`);
+  const imgFilters = document.querySelector(`.img-filters`);
+  const imgFiltersButtons = imgFilters.querySelectorAll(`.img-filters__button`);
   const pictureTemplate = document.querySelector(`#picture`)
     .content
     .querySelector(`.picture`);
@@ -27,6 +29,17 @@
     return pictureElement;
   };
 
+  const clickOnFilter = function (evt) {
+    evt.preventDefault();
+    if (evt.target.matches(`#filter-random`)) {
+
+    } else if (evt.target.matches(`#filter-discussed`)) {
+
+    } else {
+
+    }
+  };
+
   const filterPictures = function (item, index) {
     getRenderPicture(item, index);
   };
@@ -34,11 +47,14 @@
   window.load(function (img) {
     const fragment = document.createDocumentFragment();
     img.forEach(function (item, index) {
-      fragment.appendChild(filterPictures(item, index));
+      fragment.appendChild(getRenderPicture(item, index));
       picturesLoad.push(item);
     });
     picturesList.appendChild(fragment);
+    imgFilters.classList.remove(`img-filters--inactive`);
   }, function () {});
+
+  imgFiltersButtons.addEventListener(`click`, clickOnFilter);
 
   window.gallery = {
     getPosts,
