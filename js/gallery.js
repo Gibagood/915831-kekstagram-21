@@ -28,11 +28,11 @@
     pictureElement.id = index + 1;
     return pictureElement;
   };
-
+  /*
   const clickOnFilter = function (evt) {
     evt.preventDefault();
     if (evt.target.matches(`#filter-random`)) {
-
+      window.util.getRandomItem(arrPictures);
     } else if (evt.target.matches(`#filter-discussed`)) {
 
     } else {
@@ -42,7 +42,7 @@
 
   const filterPictures = function (item, index) {
     getRenderPicture(item, index);
-  };
+  }; */
 
   window.load(function (img) {
     const fragment = document.createDocumentFragment();
@@ -54,7 +54,7 @@
     imgFilters.classList.remove(`img-filters--inactive`);
   }, function () {});
 
-  imgFiltersButtons.addEventListener(`click`, clickOnFilter);
+  /* imgFiltersButtons.addEventListener(`click`, clickOnFilter); */
 
   window.gallery = {
     getPosts,
