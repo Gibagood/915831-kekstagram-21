@@ -44,7 +44,7 @@
     getRenderPicture(item, index);
   }; */
 
-  window.load(function (img) {
+  const successHandler = function (img) {
     const fragment = document.createDocumentFragment();
     img.forEach(function (item, index) {
       fragment.appendChild(getRenderPicture(item, index));
@@ -52,8 +52,25 @@
     });
     picturesList.appendChild(fragment);
     imgFilters.classList.remove(`img-filters--inactive`);
-  }, function () {});
+  };
 
+  const createErrorMessage = function (message) {
+    let node = document.createElement(`div`);
+    node.style = `z-index: 100; margin: 0 auto; text-align: center; background-color: red;`;
+    node.style.position = `absolute`;
+    node.style.left = 0;
+    node.style.right = 0;
+    node.style.fontSize = `30px`;
+
+    node.textContent = message;
+    document.body.insertAdjacentElement(`afterbegin`, node);
+  };
+
+  const errorHandler = function (errorMessage) {
+    createErrorMessage(errorMessage);
+  };
+
+  window.load(successHandler, errorHandler);
   /* imgFiltersButtons.addEventListener(`click`, clickOnFilter); */
 
   window.gallery = {
