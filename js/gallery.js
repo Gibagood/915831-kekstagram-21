@@ -29,7 +29,7 @@
     return pictureElement;
   };
 
-  const clickOnFilter = function (evt) {
+  /* const clickOnFilter = function (evt) {
     evt.preventDefault();
     if (evt.target.matches(`#filter-random`)) {
       window.util.getRandomItem(picturesLoad);
@@ -38,18 +38,24 @@
     } else {
 
     }
-  };
+  }; */
 
   const filterPictures = function (arrPictures) {
-    let j;
-    let temp;
-    for (let i = arrPictures.length - 1; i >= 0; i--) {
-      j = window.util.getRandomNumber(0, arrPictures.length - 1);
-      temp = arrPictures[j];
-      arrPictures[j] = arrPictures[i];
-      arrPictures[i] = temp;
+    if (evt.target.matches(`#filter-random`)) {
+      let j;
+      let temp;
+      for (let i = arrPictures.length - 1; i >= 0; i--) {
+        j = window.util.getRandomNumber(0, arrPictures.length - 1);
+        temp = arrPictures[j];
+        arrPictures[j] = arrPictures[i];
+        arrPictures[i] = temp;
+      }
+      return arrPictures;
+    } else if (evt.target.matches(`#filter-discussed`)) {
+
+    } else {
+      return arrPictures;
     }
-    return arrPictures;
   };
 
   const successHandler = function (img) {
@@ -57,6 +63,7 @@
       picturesLoad.push(item);
     });
     const fragment = document.createDocumentFragment();
+    /* imgFiltersButtons.addEventListener(`click`, clickOnFilter); */
     filterPictures(picturesLoad);
     picturesLoad.forEach(function (item, index) {
       fragment.appendChild(getRenderPicture(item, index));
@@ -82,7 +89,6 @@
   };
 
   window.load(successHandler, errorHandler);
-  /* imgFiltersButtons.addEventListener(`click`, clickOnFilter); */
 
   window.gallery = {
     getPosts,
