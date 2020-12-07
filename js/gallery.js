@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  const picturesLoad = [];
+  let picturesLoad = [];
   const picturesList = document.querySelector(`.pictures`);
   const imgFilters = document.querySelector(`.img-filters`);
   const imgFiltersButtons = imgFilters.querySelectorAll(`.img-filters__button`);
@@ -28,11 +28,11 @@
     pictureElement.id = index + 1;
     return pictureElement;
   };
-  /*
+
   const clickOnFilter = function (evt) {
     evt.preventDefault();
     if (evt.target.matches(`#filter-random`)) {
-      window.util.getRandomItem(arrPictures);
+      window.util.getRandomItem(picturesLoad);
     } else if (evt.target.matches(`#filter-discussed`)) {
 
     } else {
@@ -41,14 +41,15 @@
   };
 
   const filterPictures = function (item, index) {
-    getRenderPicture(item, index);
-  }; */
+    return getRenderPicture(item, index);
+  };
 
   const successHandler = function (img) {
+    picturesLoad = img;
     const fragment = document.createDocumentFragment();
-    img.forEach(function (item, index) {
-      fragment.appendChild(getRenderPicture(item, index));
-      picturesLoad.push(item);
+    picturesLoad.forEach(function (item, index) {
+      fragment.appendChild(filterPictures(item, index));
+      /* picturesLoad.push(item); */
     });
     picturesList.appendChild(fragment);
     imgFilters.classList.remove(`img-filters--inactive`);
