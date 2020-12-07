@@ -40,16 +40,26 @@
     }
   };
 
-  const filterPictures = function (item, index) {
-    return getRenderPicture(item, index);
+  const filterPictures = function (arrPictures) {
+    let j;
+    let temp;
+    for (let i = arrPictures.length - 1; i >= 0; i--) {
+      j = window.util.getRandomNumber(0, arrPictures.length - 1);
+      temp = arrPictures[j];
+      arrPictures[j] = arrPictures[i];
+      arrPictures[i] = temp;
+    }
+    return arrPictures;
   };
 
   const successHandler = function (img) {
-    picturesLoad = img;
+    img.forEach(function (item) {
+      picturesLoad.push(item);
+    });
     const fragment = document.createDocumentFragment();
+    filterPictures(picturesLoad);
     picturesLoad.forEach(function (item, index) {
-      fragment.appendChild(filterPictures(item, index));
-      /* picturesLoad.push(item); */
+      fragment.appendChild(getRenderPicture(item, index));
     });
     picturesList.appendChild(fragment);
     imgFilters.classList.remove(`img-filters--inactive`);
