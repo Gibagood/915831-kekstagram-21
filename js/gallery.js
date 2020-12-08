@@ -39,12 +39,10 @@
         arrPictures[j] = arrPictures[i];
         arrPictures[i] = temp;
       }
-      /* return arrPictures; */
       render(arrPictures);
     }/*  else if (evt.target.matches(`#filter-discussed`)) {
 
     }  */else {
-      /* return arrPictures; */
       render(arrPictures);
     }
   };
@@ -57,10 +55,12 @@
     render(picturesLoad);
   };
 
-  const render = function () {
+  const render = function (newPicturesLoad) {
+    while (picturesList.querySelector(`.picture`)) {
+      picturesList.removeChild(picturesList.querySelector(`.picture`));
+    }
     const fragment = document.createDocumentFragment();
-    /* filterPictures(picturesLoad); */
-    picturesLoad.forEach(function (item, index) {
+    newPicturesLoad.forEach(function (item, index) {
       fragment.appendChild(getRenderPicture(item, index));
     });
     picturesList.appendChild(fragment);
@@ -88,10 +88,6 @@
     evt.preventDefault();
     filterPictures(evt, picturesLoad);
   });
-  /*  const clickOnFilter = function (evt) {
-    evt.preventDefault();
-    filterPictures(evt, picturesLoad);
-  }; */
 
   window.gallery = {
     getPosts,
