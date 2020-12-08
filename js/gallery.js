@@ -4,7 +4,7 @@
   let picturesLoad = [];
   const picturesList = document.querySelector(`.pictures`);
   const imgFilters = document.querySelector(`.img-filters`);
-  const imgFiltersButtons = imgFilters.querySelectorAll(`.img-filters__button`);
+  const imgFiltersButtons = imgFilters.querySelector(`.img-filters__form`);
   const pictureTemplate = document.querySelector(`#picture`)
     .content
     .querySelector(`.picture`);
@@ -29,18 +29,7 @@
     return pictureElement;
   };
 
-  /* const clickOnFilter = function (evt) {
-    evt.preventDefault();
-    if (evt.target.matches(`#filter-random`)) {
-      window.util.getRandomItem(picturesLoad);
-    } else if (evt.target.matches(`#filter-discussed`)) {
-
-    } else {
-
-    }
-  }; */
-
-  const filterPictures = function (arrPictures) {
+  const filterPictures = function (evt, arrPictures) {
     if (evt.target.matches(`#filter-random`)) {
       let j;
       let temp;
@@ -50,21 +39,27 @@
         arrPictures[j] = arrPictures[i];
         arrPictures[i] = temp;
       }
-      return arrPictures;
-    } else if (evt.target.matches(`#filter-discussed`)) {
+      /* return arrPictures; */
+      render(arrPictures);
+    }/*  else if (evt.target.matches(`#filter-discussed`)) {
 
-    } else {
-      return arrPictures;
+    }  */else {
+      /* return arrPictures; */
+      render(arrPictures);
     }
   };
+
 
   const successHandler = function (img) {
     img.forEach(function (item) {
       picturesLoad.push(item);
     });
+    render(picturesLoad);
+  };
+
+  const render = function () {
     const fragment = document.createDocumentFragment();
-    /* imgFiltersButtons.addEventListener(`click`, clickOnFilter); */
-    filterPictures(picturesLoad);
+    /* filterPictures(picturesLoad); */
     picturesLoad.forEach(function (item, index) {
       fragment.appendChild(getRenderPicture(item, index));
     });
@@ -89,6 +84,14 @@
   };
 
   window.load(successHandler, errorHandler);
+  imgFiltersButtons.addEventListener(`click`, function (evt) {
+    evt.preventDefault();
+    filterPictures(evt, picturesLoad);
+  });
+  /*  const clickOnFilter = function (evt) {
+    evt.preventDefault();
+    filterPictures(evt, picturesLoad);
+  }; */
 
   window.gallery = {
     getPosts,

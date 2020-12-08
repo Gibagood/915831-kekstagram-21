@@ -56,7 +56,6 @@
   };
 
   const getBigPicture = function (i) {
-    console.log(window.gallery.picturesLoad);
     let item = window.gallery.picturesLoad[i - 1];
     bigPictureImg.querySelector(`img`).src = item.url;
     bigPicture.querySelector(`.likes-count`).textContent = item.likes;
