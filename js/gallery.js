@@ -40,9 +40,11 @@
         arrPictures[i] = temp;
       }
       render(arrPictures);
-    }/*  else if (evt.target.matches(`#filter-discussed`)) {
-
-    }  */else {
+    } else if (evt.target.matches(`#filter-discussed`)) {
+      arrPictures.sort((a, b) => a.comments.length < b.comments.length ? 1 : -1);
+      render(arrPictures);
+    } else if (evt.target.matches(`#filter-default`)) {
+      arrPictures.sort((a, b) => a.url - b.url);
       render(arrPictures);
     }
   };
