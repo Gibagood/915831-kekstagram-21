@@ -44,15 +44,17 @@
       arrPictures.sort((a, b) => a.comments.length < b.comments.length ? 1 : -1);
       render(arrPictures);
     } else if (evt.target.matches(`#filter-default`)) {
-      arrPictures.sort((a, b) => a.url - b.url);
+      arrPictures.sort((a, b) => a.id - b.id);
       render(arrPictures);
     }
   };
 
-
   const successHandler = function (img) {
+    let i = 0;
     img.forEach(function (item) {
+      item.id = i;
       picturesLoad.push(item);
+      i += 1;
     });
     render(picturesLoad);
   };
