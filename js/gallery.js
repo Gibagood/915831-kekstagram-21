@@ -39,13 +39,13 @@
         arrPictures[j] = arrPictures[i];
         arrPictures[i] = temp;
       }
-      window.debounce(render(arrPictures));
+      render(arrPictures);
     } else if (evt.target.matches(`#filter-discussed`)) {
       arrPictures.sort((a, b) => a.comments.length < b.comments.length ? 1 : -1);
-      window.debounce(render(arrPictures));
+      render(arrPictures);
     } else if (evt.target.matches(`#filter-default`)) {
       arrPictures.sort((a, b) => a.id - b.id);
-      window.debounce(render(arrPictures));
+      render(arrPictures);
     }
   };
 
