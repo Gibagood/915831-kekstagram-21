@@ -29,7 +29,7 @@
     return pictureElement;
   };
 
-  const filterPictures = function (evt, arrPictures) {
+  const filterPictures = window.debounce(function (evt, arrPictures) {
     if (evt.target.matches(`#filter-random`)) {
       let j;
       let temp;
@@ -47,7 +47,7 @@
       arrPictures.sort((a, b) => a.id - b.id);
       render(arrPictures);
     }
-  };
+  });
 
   const successHandler = function (img) {
     let i = 0;
