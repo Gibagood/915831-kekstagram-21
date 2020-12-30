@@ -14,7 +14,7 @@
 
     xhr.addEventListener(`load`, function () {
       if (xhr.status === StatusCode.OK) {
-        window.successHandler();
+        window.successModal();
         onSuccess(xhr.response);
       } else {
         window.errorHandler();
