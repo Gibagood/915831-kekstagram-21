@@ -46,95 +46,96 @@
     };
     document.addEventListener(`keydown`, closeEscUploadCancel);
 
+    const closeMessage = function () {
+      window.modal.imgPreview.style.filter = `none`;
+      window.modal.imgPreview.style.transform = `scale(1)`;
+      window.effects.effectField.classList.add(`hidden`);
+      fileInput.value = ``;
+      imgUploadForm.reset();
+      const successMessage = document.querySelector(`.success`);
+      successMessage.classList.add(`hidden`);
+      const errorMessage = document.querySelector(`.error`);
+      errorMessage.classList.add(`hidden`);
+    };
+
+    const clickOnButton = function (evt) {
+      if (evt.target.matches(`.success__button`)) {
+        evt.preventDefault();
+        closeMessage();
+      }
+    };
+
+    const clickAround = function (evt) {
+      if (!evt.target.matches(`.success__inner`)) {
+        evt.preventDefault();
+        closeMessage();
+      }
+    };
+
+    const clickEsc = function (evt) {
+      if (evt.key === `Escape`) {
+        evt.preventDefault();
+        closeMessage();
+      }
+    };
+
+    const successHandler = function () {
+      document.addEventListener(`click`, clickOnButton);
+      document.querySelector(`.success`).addEventListener(`click`, clickAround);
+      document.addEventListener(`keydown`, clickEsc);
+    };
+
+    window.successModal = function () {
+      const fragment = document.createDocumentFragment();
+      const successElement = successTemplate.cloneNode(true);
+      fragment.appendChild(successElement);
+      document.querySelector(`main`).appendChild(fragment);
+      const successMessage = document.querySelector(`.success`);
+      successMessage.classList.add(`hidden`);
+      document.removeEventListener(`click`, closeButtonUploadCancel);
+      successHandler();
+    };
+
+    const clickOnAnotherLoad = function (evt) {
+      if (evt.target.matches(`.error__button`)) {
+        evt.preventDefault();
+        closeMessage();
+      }
+    };
+
+    const clickArroundError = function (evt) {
+      if (!evt.target.matches(`.error__inner`)) {
+        evt.preventDefault();
+        closeMessage();
+      }
+    };
+
+    const errorModal = function () {
+      const fragment = document.createDocumentFragment();
+      const errorElement = errorTemplate.cloneNode(true);
+      fragment.appendChild(errorElement);
+      document.querySelector(`main`).appendChild(fragment);
+      const errorMessage = document.querySelector(`.error`);
+      errorMessage.classList.add(`hidden`);
+    };
+
+    errorModal();
+    window.errorHandler = function () {
+      document.addEventListener(`click`, clickOnAnotherLoad);
+      document.addEventListener(`keydown`, clickEsc);
+      document.querySelector(`.error`).addEventListener(`click`, clickArroundError);
+    };
+
     imgUploadForm.addEventListener(`submit`, function (evt) {
       let formData = new FormData(imgUploadForm);
       window.upload(formData, function () {
         closeFileInput();
+        window.successModal();
       });
       evt.preventDefault();
       formData.delete(imgUploadForm);
     });
   });
-
-  const closeMessage = function () {
-    window.modal.imgPreview.style.filter = `none`;
-    window.modal.imgPreview.style.transform = `scale(1)`;
-    window.effects.effectField.classList.add(`hidden`);
-    fileInput.value = ``;
-    imgUploadForm.reset();
-    const successMessage = document.querySelector(`.success`);
-    successMessage.classList.add(`hidden`);
-    const errorMessage = document.querySelector(`.error`);
-    errorMessage.classList.add(`hidden`);
-  };
-
-  const clickOnButton = function (evt) {
-    if (evt.target.matches(`.success__button`)) {
-      evt.preventDefault();
-      closeMessage();
-    }
-  };
-
-  const clickAround = function (evt) {
-    if (!evt.target.matches(`.success__inner`)) {
-      evt.preventDefault();
-      closeMessage();
-    }
-  };
-
-  const clickEsc = function (evt) {
-    if (evt.key === `Escape`) {
-      evt.preventDefault();
-      closeMessage();
-    }
-  };
-
-  const successHandler = function () {
-    document.addEventListener(`click`, clickOnButton);
-    document.querySelector(`.success`).addEventListener(`click`, clickAround);
-    document.addEventListener(`keydown`, clickEsc);
-  };
-
-  window.successModal = function () {
-    const fragment = document.createDocumentFragment();
-    const successElement = successTemplate.cloneNode(true);
-    fragment.appendChild(successElement);
-    document.querySelector(`main`).appendChild(fragment);
-    const successMessage = document.querySelector(`.success`);
-    successMessage.classList.add(`hidden`);
-    successHandler();
-  };
-
-  const clickOnAnotherLoad = function (evt) {
-    if (evt.target.matches(`.error__button`)) {
-      evt.preventDefault();
-      closeMessage();
-    }
-  };
-
-  const clickArroundError = function (evt) {
-    if (!evt.target.matches(`.error__inner`)) {
-      evt.preventDefault();
-      closeMessage();
-    }
-  };
-
-  const errorModal = function () {
-    const fragment = document.createDocumentFragment();
-    const errorElement = errorTemplate.cloneNode(true);
-    fragment.appendChild(errorElement);
-    document.querySelector(`main`).appendChild(fragment);
-    const errorMessage = document.querySelector(`.error`);
-    errorMessage.classList.add(`hidden`);
-  };
-
-  errorModal();
-  window.errorHandler = function () {
-    document.addEventListener(`click`, clickOnAnotherLoad);
-    document.addEventListener(`keydown`, clickEsc);
-    document.querySelector(`.error`).addEventListener(`click`, clickArroundError);
-  };
-
   window.modal = {
     formUpload,
     imgPreview,
