@@ -53,9 +53,9 @@
       fileInput.value = ``;
       imgUploadForm.reset();
       const successMessage = document.querySelector(`.success`);
-      successMessage.classList.add(`hidden`);
-      const errorMessage = document.querySelector(`.error`);
-      errorMessage.classList.add(`hidden`);
+      document.querySelector(`main`).removeChild(successMessage);
+      /*  const errorMessage = document.querySelector(`.error`);
+      errorMessage.classList.add(`hidden`); */
     };
 
     const clickOnButton = function (evt) {
@@ -91,8 +91,7 @@
       fragment.appendChild(successElement);
       document.querySelector(`main`).appendChild(fragment);
       const successMessage = document.querySelector(`.success`);
-      successMessage.classList.add(`hidden`);
-      document.removeEventListener(`click`, closeButtonUploadCancel);
+      successMessage.classList.remove(`hidden`);
       successHandler();
     };
 
@@ -110,27 +109,26 @@
       }
     };
 
-    const errorModal = function () {
+    const errorHandler = function () {
+      document.addEventListener(`click`, clickOnAnotherLoad);
+      document.addEventListener(`keydown`, clickEsc);
+      document.querySelector(`.error`).addEventListener(`click`, clickArroundError);
+    };
+
+    window.errorModal = function () {
       const fragment = document.createDocumentFragment();
       const errorElement = errorTemplate.cloneNode(true);
       fragment.appendChild(errorElement);
       document.querySelector(`main`).appendChild(fragment);
       const errorMessage = document.querySelector(`.error`);
-      errorMessage.classList.add(`hidden`);
-    };
-
-    errorModal();
-    window.errorHandler = function () {
-      document.addEventListener(`click`, clickOnAnotherLoad);
-      document.addEventListener(`keydown`, clickEsc);
-      document.querySelector(`.error`).addEventListener(`click`, clickArroundError);
+      errorMessage.classList.remove(`hidden`);
+      errorHandler();
     };
 
     imgUploadForm.addEventListener(`submit`, function (evt) {
       let formData = new FormData(imgUploadForm);
       window.upload(formData, function () {
         closeFileInput();
-        window.successModal();
       });
       evt.preventDefault();
       formData.delete(imgUploadForm);

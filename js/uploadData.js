@@ -17,7 +17,7 @@
         window.successModal();
         onSuccess(xhr.response);
       } else {
-        window.errorHandler();
+        window.errorModal();
         onError(`Статус ответа: ` + xhr.status + ` ` + xhr.statusText);
       }
     });
